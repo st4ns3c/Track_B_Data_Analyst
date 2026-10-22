@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<!--
+  Day 4 Exercise: a live weather page using fetch() in the browser.
+
+  Type any city, press Search, and the page shows the weather right now
+  plus the next 5 days. It uses Open-Meteo (open-meteo.com) because:
+    - it needs NO API key, so there's nothing secret sitting in this file
+      (anyone can read browser JavaScript with "View Page Source")
+    - it allows requests from any web page, so it works when you simply
+      double-click this file to open it
+
+  The page always shows one of three states:
+    1. Loading...  while we wait for the API
+    2. Success     a clean weather card
+    3. Error       a clear message saying what went wrong
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>City Weather</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 640px;
+      margin: 40px auto;
+      padding: 0 20px;
+      background: #eef3f9;
+      color: #222;
+    }
+    h1 { color: #1F4E79; margin-bottom: 4px; }
+    .subtitle { color: #555; margin-top: 0; }
+
+    /* The search box and button sit side by side */
+    form { display: flex; gap: 8px; margin: 20px 0 8px; }
+    input {
+      flex: 1;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #b8c9de;
+      border-radius: 5px;
+    }
+    button {
+      background: #2E75B6;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover { background: #1F4E79; }
+    /* Greyed out while a request is running, so nobody double-clicks */
+    button:disabled { background: #9bb3cc; cursor: wait; }
+
+    /* Quick-pick buttons for a few towns */
+    .quick { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+    .quick button {
+      background: white;
+      color: #2E75B6;
+      border: 1px solid #2E75B6;
+      padding: 4px 12px;
+      font-size: 14px;
+    }
+    .quick button:hover { background: #2E75B6; color: white; }
+
+    /* The result box. Its look changes depending on the state. */
+    #result {
+      background: white;
+      border: 1px solid #d0dff0;
+      border-radius: 8px;
+      padding: 20px;
+      margin-top: 10px;
+      min-height: 60px;
+    }
+    #result.loading { color: #2E75B6; font-style: italic; }
+    #result.error {
+      background: #fdecea;
+      border-color: #f5c2c0;
+      color: #a12622;
+    }
+
+    .now { display: flex; align-items: center; gap: 16px; }
+    .big-icon { font-size: 56px; }
+    .big-temp { font-size: 42px; font-weight: bold; color: #1F4E79; }
+    .place { margin: 0 0 4px; }
+    .muted { color: #666; font-size: 14px; }
+
+    /* Little boxes for humidity, wind etc. */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin: 16px 0;
+    }
+    .stat { background: #f7f9fc; border-radius: 6px; padding: 8px; text-align: center; }
+    .stat strong { display: block; font-size: 18px; }
+
+    /* The 5-day forecast as a row of cards */
+    .days { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+    .day { background: #f7f9fc; border-radius: 6px; padding: 8px 4px; text-align: center; font-size: 14px; }
+    .day .icon { font-size: 26px; }
+
+    /* On a phone, 5 cards in a row is too squashed */
+    @media (max-width: 480px) {
+      .days { grid-template-columns: repeat(3, 1fr); }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<h1>City Weather</h1>
+<p class="subtitle">Live weather for any city in the world, from Open-Meteo.</p>
+
+<!-- Using a <form> means pressing Enter in the box also searches -->
+<form id="searchForm">
+  <input type="text" id="cityInput" placeholder="Enter a city, e.g. Nairobi" autocomplete="off">
+  <button type="submit" id="searchButton">Search</button>
+</form>
+
+<div class="quick">
+  <button type="button" data-city="Nairobi">Nairobi</button>
+  <button type="button" data-city="Mombasa">Mombasa</button>
+  <button type="button" data-city="Kisumu">Kisumu</button>
+  <button type="button" data-city="London">London</button>
+  <button type="button" data-city="Tokyo">Tokyo</button>
+</div>
+
+<div id="result">Enter a city above and click Search.</div>
+
+<script>
+// Grab the page elements once, so I don't repeat getElementById everywhere.
+const form = document.getElementById("searchForm");
+const cityInput = document.getElementById("cityInput");
+const searchButton = document.getElementById("searchButton");
+const result = document.getElementById("result");
+
+// Open-Meteo sends a number (a "WMO weather code") instead of words.
+// Same idea as my Day 1 Python lookup table, now with an emoji too.
+const WEATHER_CODES = {
+  0: ["Clear sky", "☀️"],
+  1: ["Mostly clear", "🌤️"],
+  2: ["Partly cloudy", "⛅"],
+  3: ["Overcast", "☁️"],
+  45: ["Foggy", "🌫️"],
+  48: ["Foggy", "🌫️"],
+  51: ["Light drizzle", "🌦️"],
+  53: ["Drizzle", "🌦️"],
+  55: ["Heavy drizzle", "🌧️"],
+  61: ["Light rain", "🌦️"],
+  63: ["Rain", "🌧️"],
+  65: ["Heavy rain", "🌧️"],
+  71: ["Light snow", "🌨️"],
+  73: ["Snow", "🌨️"],
+  75: ["Heavy snow", "❄️"],
+  80: ["Light showers", "🌦️"],
+  81: ["Showers", "🌧️"],
+  82: ["Heavy showers", "⛈️"],
+  95: ["Thunderstorm", "⛈️"],
+  96: ["Thunderstorm with hail", "⛈️"],
+  99: ["Thunderstorm with heavy hail", "⛈️"],
+};
+
+function describeWeather(code) {
+  // If the API ever sends a code I didn't list, don't crash, just say so.
+  return WEATHER_CODES[code] || ["Unknown conditions", "🌡️"];
+}
+
+// Anything typed by the user (or sent by an API) gets cleaned before it goes
+// into innerHTML. Otherwise someone could type <script> tags into the box
+// and the page would run them.
+function escapeHtml(text) {
+  const div = document.createElement("div");
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+// ---- The three states -------------------------------------------------
+
+function showLoading(city) {
+  result.className = "loading";
+  result.textContent = `Loading weather for ${city}...`;
+  // Stop extra clicks while we're waiting.
+  searchButton.disabled = true;
+}
+
+function showError(message) {
+  result.className = "error";
+  result.innerHTML = `<strong>Sorry!</strong> ${escapeHtml(message)}`;
+  searchButton.disabled = false;
+}
+
+function showWeather(place, weather) {
+  result.className = "";
+  searchButton.disabled = false;
+
+  const now = weather.current;
+  const daily = weather.daily;
+  const [description, icon] = describeWeather(now.weather_code);
+
+  // "Nairobi, Nairobi County, Kenya". Some places have no region (admin1), so skip blanks.
+  // new Set() drops repeats, so Tokyo shows as "Tokyo, Japan" not "Tokyo, Tokyo, Japan".
+  const placeName = [...new Set([place.name, place.admin1, place.country].filter(Boolean))].join(", ");
+
+  // The API gives local time as "2026-10-22T17:15". Turn it into "Thursday 5:15 pm".
+  const localTime = new Date(now.time).toLocaleString("en-GB", {
+    weekday: "long", hour: "numeric", minute: "2-digit", hour12: true,
+  });
+
+  // Build one small card per day. map() loops over the dates, and i lets me
+  // pick the matching value from the other lists (they're all in the same order).
+  const dayCards = daily.time.map((date, i) => {
+    const [dayDescription, dayIcon] = describeWeather(daily.weather_code[i]);
+    // Adding "T00:00" stops JavaScript treating the date as UTC midnight,
+    // which can shift it back a day for some time zones.
+    const label = i === 0
+      ? "Today"
+      : new Date(date + "T00:00").toLocaleDateString("en-GB", { weekday: "short", day: "numeric" });
+    return `
+      <div class="day" title="${dayDescription}">
+        <div>${label}</div>
+        <div class="icon">${dayIcon}</div>
+        <div><strong>${Math.round(daily.temperature_2m_max[i])}°</strong> / ${Math.round(daily.temperature_2m_min[i])}°</div>
+        <div class="muted">💧 ${daily.precipitation_probability_max[i] ?? 0}%</div>
+      </div>`;
+  }).join("");
+
+  result.innerHTML = `
+    <div class="now">
+      <div class="big-icon">${icon}</div>
+      <div>
+        <h2 class="place">${escapeHtml(placeName)}</h2>
+        <div class="muted">${localTime} local time</div>
+        <div><span class="big-temp">${Math.round(now.temperature_2m)}°C</span> ${description}</div>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><strong>${Math.round(now.apparent_temperature)}°C</strong>feels like</div>
+      <div class="stat"><strong>${now.relative_humidity_2m}%</strong>humidity</div>
+      <div class="stat"><strong>${Math.round(now.wind_speed_10m)} km/h</strong>wind</div>
+    </div>
+
+    <h3>Next 5 days</h3>
+    <div class="days">${dayCards}</div>
+  `;
+}
+
+// ---- The API calls ----------------------------------------------------
+
+// One helper that every request goes through, so the error checks live in
+// one place (same idea as fetch_json() in my Day 3 Python tool).
+async function fetchJson(url, what) {
+  let response;
+  try {
+    response = await fetch(url);
+  } catch (networkProblem) {
+    // fetch() only throws when there's no answer at all:
+    // no internet, DNS failure, or the browser blocked the request.
+    throw new Error(`Couldn't reach the ${what} service. Check your internet connection.`);
+  }
+
+  // response.ok is true for 200-299. Anything else, explain it in plain English.
+  if (!response.ok) {
+    if (response.status === 429) {
+      throw new Error(`Too many ${what} requests. Wait a minute and try again.`);
+    }
+    if (response.status >= 500) {
+      throw new Error(`The ${what} service is having problems right now (${response.status}). Try again later.`);
+    }
+    throw new Error(`The ${what} request failed (status ${response.status}).`);
+  }
+
+  // Reading the body takes time too, so it needs its own await.
+  return await response.json();
+}
+
+// Step 1: Open-Meteo wants coordinates, not names, so first turn the
+// city name into latitude/longitude with their free geocoding API.
+async function findCity(city) {
+  // encodeURIComponent makes names with spaces or accents safe in a URL ("New York", "São Paulo").
+  const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1&language=en`;
+  const data = await fetchJson(url, "city search");
+
+  // Careful: a city that doesn't exist still comes back as 200 OK,
+  // just with no "results" list. So response.ok alone isn't enough here.
+  if (!data.results || data.results.length === 0) {
+    throw new Error(`No city called "${city}" was found. Check the spelling and try again.`);
+  }
+  return data.results[0];
+}
+
+// Step 2: use those coordinates to get the actual weather.
+async function getWeather(place) {
+  const params = new URLSearchParams({
+    latitude: place.latitude,
+    longitude: place.longitude,
+    current: "temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,weather_code",
+    daily: "weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max",
+    timezone: "auto", // times come back in the city's own time zone
+    forecast_days: 5,
+  });
+  return await fetchJson(`https://api.open-meteo.com/v1/forecast?${params}`, "weather");
+}
+
+// ---- Putting it together ----------------------------------------------
+
+async function loadWeather(city) {
+  city = city.trim();
+  if (!city) {
+    showError("Please enter a city name first.");
+    return;
+  }
+
+  // Show "Loading..." BEFORE the first await, so there's instant feedback.
+  showLoading(city);
+
+  try {
+    const place = await findCity(city);      // the output of call 1...
+    const weather = await getWeather(place); // ...is the input to call 2
+    showWeather(place, weather);
+  } catch (error) {
+    // Any error thrown anywhere above lands here, and the page stays usable.
+    showError(error.message);
+  }
+}
+
+// Search when the form is submitted (button click OR Enter key).
+form.addEventListener("submit", (event) => {
+  event.preventDefault(); // a form normally reloads the page; stop that
+  loadWeather(cityInput.value);
+});
+
+// The quick-pick buttons fill in the box and search straight away.
+document.querySelectorAll(".quick button").forEach((button) => {
+  button.addEventListener("click", () => {
+    cityInput.value = button.dataset.city;
+    loadWeather(button.dataset.city);
+  });
+});
+</script>
+
+</body>
+</html>
