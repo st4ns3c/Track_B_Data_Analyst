@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<!--
+  City Weather Dashboard
+  ======================
+  Build plan
+    Problem    : Before visiting a city you want the weather now, the next few days,
+                 and the basics about the country, without opening three websites.
+    Input      : a city name typed into the page.
+    Processing : 1. OpenWeatherMap current weather -> also gives the country code ("KE")
+                 2. OpenWeatherMap 5-day forecast  -> squeezed into a 3-day summary
+                 3. REST Countries v5, using the country code from step 1
+    Output     : one dashboard with a weather card, a 3-day forecast and a country card.
+
+  The API keys are NOT in this file. They live in config.js, which is in .gitignore,
+  so they never get pushed to GitHub. See README.md for setup.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>City Weather Dashboard</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 860px;
+      margin: 32px auto;
+      padding: 0 16px;
+      background: #eef3f9;
+      color: #222;
+    }
+    h1 { color: #1F4E79; margin-bottom: 4px; }
+    .subtitle { color: #555; margin-top: 0; }
+
+    form { display: flex; gap: 8px; margin: 20px 0 8px; }
+    input {
+      flex: 1;
+      min-width: 0;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #b8c9de;
+      border-radius: 5px;
+    }
+    button {
+      background: #2E75B6;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover { background: #1F4E79; }
+    button:disabled { background: #9bb3cc; cursor: wait; }
+
+    .quick { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+    .quick button {
+      background: white;
+      color: #2E75B6;
+      border: 1px solid #2E75B6;
+      padding: 4px 12px;
+      font-size: 14px;
+    }
+    .quick button:hover { background: #2E75B6; color: white; }
+
+    /* The message box used for the start text, loading and errors */
+    .message {
+      background: white;
+      border: 1px solid #d0dff0;
+      border-radius: 8px;
+      padding: 20px;
+    }
+    .message.loading { color: #2E75B6; font-style: italic; }
+    .message.error { background: #fdecea; border-color: #f5c2c0; color: #a12622; }
+
+    /* Dashboard: weather on the left, country on the right, forecast underneath */
+    .dashboard {
+      display: grid;
+      grid-template-columns: 3fr 2fr;
+      gap: 16px;
+    }
+    .card {
+      background: white;
+      border: 1px solid #d0dff0;
+      border-radius: 8px;
+      padding: 18px;
+    }
+    .card h2 { margin: 0 0 4px; color: #1F4E79; }
+    .card h3 { margin: 0 0 12px; color: #1F4E79; font-size: 16px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .forecast { grid-column: 1 / -1; }
+    .muted { color: #666; font-size: 14px; }
+
+    .now { display: flex; align-items: center; gap: 8px; }
+    .now img { width: 90px; height: 90px; }
+    .big-temp { font-size: 44px; font-weight: bold; color: #1F4E79; }
+
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; }
+    .stat { background: #f7f9fc; border-radius: 6px; padding: 8px; text-align: center; font-size: 14px; }
+    .stat strong { display: block; font-size: 18px; }
+
+    .days { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .day { background: #f7f9fc; border-radius: 6px; padding: 10px; text-align: center; }
+    .day img { width: 60px; height: 60px; }
+    .day .temps { font-size: 18px; }
+
+    .flag { width: 100%; max-width: 220px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 8px; }
+    dl { display: grid; grid-template-columns: auto 1fr; gap: 6px 12px; margin: 0; font-size: 15px; }
+    dt { color: #666; }
+    dd { margin: 0; font-weight: bold; }
+    .note { background: #fff7e0; border: 1px solid #f0d58a; border-radius: 6px; padding: 10px; font-size: 14px; color: #7a5a00; }
+
+    /* On a phone, stack everything in one column */
+    @media (max-width: 640px) {
+      .dashboard { grid-template-columns: 1fr; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<h1>City Weather Dashboard</h1>
+<p class="subtitle">Weather now, the next 3 days, and the country basics for any city.</p>
+
+<form id="searchForm">
+  <input type="text" id="cityInput" placeholder="Enter a city, e.g. Mombasa" autocomplete="off">
+  <button type="submit" id="searchButton">Search</button>
+</form>
+
+<div class="quick">
+  <button type="button" data-city="Nairobi">Nairobi</button>
+  <button type="button" data-city="Mombasa">Mombasa</button>
+  <button type="button" data-city="Kampala">Kampala</button>
+  <button type="button" data-city="London">London</button>
+  <button type="button" data-city="Tokyo">Tokyo</button>
+</div>
+
+<div id="result" class="message">Enter a city above and click Search.</div>
+
+<!-- config.js holds the API keys (see config.example.js). It's loaded before the
+     main script so the keys are ready. If it's missing, the page explains how to add it. -->
+<script src="config.js"></script>
+<script>
+const form = document.getElementById("searchForm");
+const cityInput = document.getElementById("cityInput");
+const searchButton = document.getElementById("searchButton");
+const result = document.getElementById("result");
+
+// window.APP_CONFIG comes from config.js. "|| {}" stops the page crashing if the file is missing.
+const CONFIG = window.APP_CONFIG || {};
+
+// Anything typed by the user or sent by an API is escaped before going into innerHTML,
+// so text like <script> is shown as text instead of being run.
+function escapeHtml(text) {
+  const div = document.createElement("div");
+  div.textContent = String(text);
+  return div.innerHTML;
+}
+
+// ---- Page states --------------------------------------------------------
+
+function showLoading(city) {
+  result.className = "message loading";
+  result.textContent = `Loading the dashboard for ${city}...`;
+  searchButton.disabled = true;
+}
+
+function showError(message) {
+  result.className = "message error";
+  result.innerHTML = `<strong>Sorry!</strong> ${escapeHtml(message)}`;
+  searchButton.disabled = false;
+}
+
+// ---- API calls ----------------------------------------------------------
+
+// Every OpenWeatherMap request goes through here so the error messages live in one place.
+async function fetchWeatherApi(path, params) {
+  const query = new URLSearchParams({ ...params, appid: CONFIG.OPENWEATHER_API_KEY, units: "metric" });
+  let response;
+  try {
+    response = await fetch(`https://api.openweathermap.org/data/2.5/${path}?${query}`);
+  } catch (networkProblem) {
+    throw new Error("Couldn't reach the weather service. Check your internet connection.");
+  }
+
+  if (response.ok) {
+    return await response.json();
+  }
+  if (response.status === 401) {
+    throw new Error("The OpenWeatherMap key in config.js is wrong or not active yet (new keys can take up to 2 hours).");
+  }
+  if (response.status === 404) {
+    throw new Error(`No city called "${params.q}" was found. Check the spelling and try again.`);
+  }
+  if (response.status === 429) {
+    throw new Error("Too many weather requests. Wait a minute and try again.");
+  }
+  if (response.status >= 500) {
+    throw new Error(`The weather service is having problems right now (${response.status}). Try again later.`);
+  }
+  throw new Error(`The weather request failed (status ${response.status}).`);
+}
+
+// Step 1: current weather. This also tells us the country code and coordinates.
+function getCurrentWeather(city) {
+  return fetchWeatherApi("weather", { q: city });
+}
+
+// Step 2: the 5-day / 3-hour forecast. Using the coordinates from step 1 guarantees
+// it's the same place (two towns can share a name).
+function getForecast(coord) {
+  return fetchWeatherApi("forecast", { lat: coord.lat, lon: coord.lon });
+}
+
+// Step 3: country facts from REST Countries, using the country code from step 1.
+// This returns either the country, or a short note explaining why it couldn't load.
+// The weather is the main thing, so a country problem shouldn't break the whole page.
+async function getCountry(countryCode) {
+  if (location.protocol === "file:") {
+    return { note: "Country info needs the page to be opened through a local server. "
+                 + "Run  python3 -m http.server 8000  in this folder and open http://localhost:8000" };
+  }
+
+  const fields = "names.common,names.official,capitals,population,region,subregion,"
+               + "currencies,languages,flag.url_svg,flag.emoji,calling_codes,cars.driving_side";
+  const url = `https://api.restcountries.com/countries/v5/codes.alpha_2/${countryCode}?response_fields=${fields}`;
+
+  let response;
+  try {
+    response = await fetch(url, { headers: { Authorization: `Bearer ${CONFIG.RESTCOUNTRIES_API_KEY}` } });
+  } catch (networkProblem) {
+    return { note: "Couldn't reach the country service." };
+  }
+
+  if (response.ok) {
+    const countries = (await response.json()).data.objects;
+    return countries.length ? { country: countries[0] } : { note: `No country info for ${countryCode}.` };
+  }
+
+  // REST Countries explains errors in the body, e.g. {"errors":[{"code":"originNotAllowed"}]}
+  const body = await response.json().catch(() => ({}));
+  const code = body.errors && body.errors[0] && body.errors[0].code;
+  if (code === "originNotAllowed") {
+    return { note: `Your REST Countries key doesn't allow this website yet. Add "${location.hostname}" `
+                 + "to the key's allowed origins at restcountries.com/api-keys." };
+  }
+  if (response.status === 401) {
+    return { note: "The REST Countries key in config.js is wrong or missing." };
+  }
+  if (response.status === 429) {
+    return { note: "Country info limit reached for this month (1,000 free requests)." };
+  }
+  return { note: `Country info failed to load (status ${response.status}).` };
+}
+
+// ---- Turning raw data into something readable ----------------------------
+
+// OpenWeatherMap gives times in UTC plus the city's offset in seconds. Adding the offset
+// and then reading the result "as UTC" gives the time on the city's own clocks.
+function cityTime(unixSeconds, offsetSeconds, options) {
+  return new Date((unixSeconds + offsetSeconds) * 1000)
+    .toLocaleString("en-GB", { ...options, timeZone: "UTC" });
+}
+
+function cityDate(unixSeconds, offsetSeconds) {
+  return new Date((unixSeconds + offsetSeconds) * 1000).toISOString().slice(0, 10); // "2026-10-23"
+}
+
+// The forecast is 40 readings, one every 3 hours. Group them by the city's local day,
+// skip today, and keep 3 days: lowest low, highest high, most common sky, highest rain chance.
+function summariseForecast(forecast) {
+  const offset = forecast.city.timezone;
+  const today = cityDate(Math.floor(Date.now() / 1000), offset);
+
+  const byDay = {};
+  for (const reading of forecast.list) {
+    const day = cityDate(reading.dt, offset);
+    if (day === today) continue;
+    (byDay[day] = byDay[day] || []).push(reading);
+  }
+
+  return Object.entries(byDay).slice(0, 3).map(([day, readings]) => {
+    // Count how often each description appears and keep the most common one.
+    const counts = {};
+    for (const r of readings) counts[r.weather[0].description] = (counts[r.weather[0].description] || 0) + 1;
+    const description = Object.keys(counts).reduce((a, b) => (counts[a] >= counts[b] ? a : b));
+    const icon = readings.find((r) => r.weather[0].description === description).weather[0].icon;
+
+    return {
+      label: new Date(day + "T00:00:00Z").toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short", timeZone: "UTC" }),
+      low: Math.min(...readings.map((r) => r.main.temp_min)),
+      high: Math.max(...readings.map((r) => r.main.temp_max)),
+      description,
+      icon: icon.replace("n", "d"), // always show the daytime icon for a whole day
+      rainChance: Math.round(Math.max(...readings.map((r) => r.pop || 0)) * 100),
+    };
+  });
+}
+
+function iconUrl(icon) {
+  return `https://openweathermap.org/img/wn/${icon}@2x.png`;
+}
+
+function capitalise(text) {
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
+// ---- Building the dashboard ---------------------------------------------
+
+function weatherCard(weather) {
+  const now = weather.weather[0];
+  const localTime = cityTime(weather.dt, weather.timezone, { weekday: "long", hour: "numeric", minute: "2-digit", hour12: true });
+  return `
+    <section class="card">
+      <h2>${escapeHtml(weather.name)}, ${escapeHtml(weather.sys.country)}</h2>
+      <div class="muted">${localTime} local time</div>
+      <div class="now">
+        <img src="${iconUrl(now.icon)}" alt="${escapeHtml(now.description)}">
+        <div>
+          <div class="big-temp">${Math.round(weather.main.temp)}°C</div>
+          <div>${escapeHtml(capitalise(now.description))}</div>
+        </div>
+      </div>
+      <div class="stats">
+        <div class="stat"><strong>${Math.round(weather.main.feels_like)}°C</strong>feels like</div>
+        <div class="stat"><strong>${weather.main.humidity}%</strong>humidity</div>
+        <!-- OpenWeatherMap gives wind in metres per second; x 3.6 turns it into km/h -->
+        <div class="stat"><strong>${Math.round(weather.wind.speed * 3.6)} km/h</strong>wind</div>
+      </div>
+    </section>`;
+}
+
+function countryCard(countryResult) {
+  if (countryResult.note) {
+    return `<section class="card"><h3>About the country</h3><div class="note">${escapeHtml(countryResult.note)}</div></section>`;
+  }
+
+  const c = countryResult.country;
+  const capital = (c.capitals || []).map((cap) => cap.name).join(", ") || "None";
+  const languages = (c.languages || []).map((l) => l.name).join(", ") || "Unknown";
+  const currencies = (c.currencies || []).map((cur) => `${cur.name} (${cur.code})`).join(", ") || "None";
+  const dialling = (c.calling_codes || []).map((code) => `+${code}`).join(", ");
+  const driving = c.cars && c.cars.driving_side ? `the ${c.cars.driving_side}` : "Unknown";
+
+  return `
+    <section class="card">
+      <h3>About the country</h3>
+      ${c.flag && c.flag.url_svg ? `<img class="flag" src="${escapeHtml(c.flag.url_svg)}" alt="Flag of ${escapeHtml(c.names.common)}">` : ""}
+      <h2>${escapeHtml(c.names.common)}</h2>
+      <div class="muted" style="margin-bottom:12px">${escapeHtml(c.names.official)}</div>
+      <dl>
+        <dt>Capital</dt><dd>${escapeHtml(capital)}</dd>
+        <dt>Region</dt><dd>${escapeHtml(c.subregion || c.region)}</dd>
+        <dt>Population</dt><dd>${c.population.toLocaleString()}</dd>
+        <dt>Currency</dt><dd>${escapeHtml(currencies)}</dd>
+        <dt>Languages</dt><dd>${escapeHtml(languages)}</dd>
+        <dt>Dialling code</dt><dd>${escapeHtml(dialling)}</dd>
+        <dt>Cars drive on</dt><dd>${escapeHtml(driving)}</dd>
+      </dl>
+    </section>`;
+}
+
+function forecastCard(days) {
+  const cards = days.map((d) => `
+    <div class="day">
+      <strong>${d.label}</strong><br>
+      <img src="${iconUrl(d.icon)}" alt="${escapeHtml(d.description)}">
+      <div class="temps"><strong>${Math.round(d.high)}°</strong> / ${Math.round(d.low)}°</div>
+      <div>${escapeHtml(capitalise(d.description))}</div>
+      <div class="muted">💧 ${d.rainChance}% chance of rain</div>
+    </div>`).join("");
+  return `<section class="card forecast"><h3>Next 3 days</h3><div class="days">${cards}</div></section>`;
+}
+
+// ---- Putting it together --------------------------------------------------
+
+async function loadDashboard(city) {
+  city = city.trim();
+  if (!city) {
+    showError("Please enter a city name first.");
+    return;
+  }
+  if (!CONFIG.OPENWEATHER_API_KEY) {
+    showError("No OpenWeatherMap key found. Copy config.example.js to config.js and add your keys (see README.md).");
+    return;
+  }
+
+  showLoading(city);
+
+  try {
+    const weather = await getCurrentWeather(city);
+
+    // The forecast and the country don't depend on each other, so ask for both at once.
+    // Promise.all waits for both, which is faster than one after the other.
+    const [forecast, countryResult] = await Promise.all([
+      getForecast(weather.coord),
+      getCountry(weather.sys.country),
+    ]);
+
+    result.className = "dashboard";
+    result.innerHTML = weatherCard(weather) + countryCard(countryResult) + forecastCard(summariseForecast(forecast));
+    searchButton.disabled = false;
+  } catch (error) {
+    showError(error.message);
+  }
+}
+
+form.addEventListener("submit", (event) => {
+  event.preventDefault(); // stop the form reloading the page
+  loadDashboard(cityInput.value);
+});
+
+document.querySelectorAll(".quick button").forEach((button) => {
+  button.addEventListener("click", () => {
+    cityInput.value = button.dataset.city;
+    loadDashboard(button.dataset.city);
+  });
+});
+</script>
+
+</body>
+</html>
