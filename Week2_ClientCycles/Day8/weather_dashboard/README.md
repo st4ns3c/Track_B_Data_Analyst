@@ -2,7 +2,7 @@
 
 A single web page where you type any city and see the weather right now, a 3-day forecast, and the country's basic facts (capital, population, currency, languages, flag) on one dashboard.
 
-*Week 1 · Day 5 project (Option B): API-Powered Application.*
+**Version 1.0, client delivery.** Built in Week 1 · Day 5 ([original](../../../Week1_APIS/Day5/weather_dashboard/)) and packaged for delivery in Week 2 · Day 8. See [CHANGELOG.md](CHANGELOG.md) for what changed.
 
 ![Dashboard screenshot](screenshot.png)
 
@@ -27,7 +27,7 @@ Calls 2 and 3 don't depend on each other, so they run at the same time with `Pro
 
 1. Clone the repo and go into this folder:
    ```bash
-   cd Week1_APIS/Day5/weather_dashboard
+   cd Week2_ClientCycles/Day8/weather_dashboard
    ```
 2. Get two free API keys:
 
@@ -80,6 +80,15 @@ Then open **http://localhost:8000** in your browser, type a city and press **Sea
 
 A country problem never breaks the page: the weather is the main thing, so the country card just shows a yellow note instead.
 
+## Assumptions
+
+- **Runs on your own computer.** It isn't hosted online. You open it through the local server described above.
+- **Metric units.** Temperatures are in °C and wind is in km/h.
+- **Free API plans are enough.** OpenWeatherMap's free plan allows 1,000 calls a day and each search uses 2, so that's about 500 searches a day. REST Countries' free plan covers the third call.
+- **"3-day forecast" means the next three full days.** Today is already covered by the current-weather card.
+- **The first match wins.** If two places share a name (for example London, UK and London, Canada), OpenWeatherMap picks the best-known one. Add the country code to choose: `London,CA`.
+- **Times are the city's local time,** not the time on your computer.
+
 ## A note on API keys in the browser
 
 Anything a web page uses can be seen by anyone who opens it (View Page Source / DevTools). That's why the keys sit in `config.js`, which never goes to GitHub, instead of in `index.html`. This is fine for a page you run on your own computer. If this were put online for other people, the keys would move to a small backend server that calls the APIs for the page (covered on Day 16).
@@ -93,6 +102,7 @@ Anything a web page uses can be seen by anyone who opens it (View Page Source / 
 | `config.js` | Your real keys (you create it; never committed) |
 | `.gitignore` | Keeps `config.js` out of git |
 | `screenshot.png` | The screenshot above |
+| `CHANGELOG.md` | What changed for the v1.0 delivery |
 | `README.md` | This guide |
 
 ## What I practised
