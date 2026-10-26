@@ -98,21 +98,10 @@ Goodbye.
 - **The litres are for whatever period you're paying** (a day or a week). The tool multiplies by the current price either way.
 - **It doesn't save anything.** Each result is shown on screen only. Keeping a payment history isn't part of version 1.0.
 
-## Tests
-
-The checks used before delivery can be run again at any time:
-
-```bash
-python -m unittest test_dairy_calculator.py
-```
-
-They cover reading the price (including a missing or wrong file), rejecting letters, zero and negative litres, and the money maths.
-
 ## Files
 
 | File | What it is |
 |---|---|
 | `dairy_calculator.py` | The calculator |
 | `price.txt` | This week's price per litre. The only file the manager edits |
-| `test_dairy_calculator.py` | Automated checks |
 | `README.md` | This guide |
