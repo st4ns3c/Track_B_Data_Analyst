@@ -1,0 +1,113 @@
+date,client_name,county,product,qty,unit_price
+2026-08-01,Bombolulu Shop,Mombasa,Sugar 1kg,31,160
+2026-08-01,Changamwe Stores,Mombasa,Soap 800g,2,220
+2026-08-01,Diani Supplies,Mombasa,Cooking Oil 1L,53,325
+2026-08-01,Eastleigh Distributors,Nairobi,Soap 800g,36,215
+2026-08-01,Hassan Traders,Nairobi,Soap 800g,132,220
+2026-08-01,Industrial Area Depot,Nairobi,Rice 5kg,8,660
+2026-08-01,Kamau Stores ,Nairobi,Soap 800g,5,225
+2026-08-01,Shanzu Shop,Mombasa,Unga 2kg,4,185
+2026-08-02,Hassan Traders,Nairobi,Rice 5kg,37,650
+2026-08-02,Kongowea Traders,Mombasa,Rice 5kg,1,635
+2026-08-02,Nyali Mini Mart,Mombasa,Sugar 1kg,65,160
+2026-08-02,Ukunda Mart,Mombasa,Cooking Oil 1L,24,325
+2026-08-03,Mombasa Retail Hub,Mombasa,Sugar 1kg,4,160
+2026-08-03,Otieno  Wholesale,Nairobi,Rice 5kg,23,655
+2026-08-04,Tudor Traders,Mombasa,Rice 5kg,13,645
+2026-08-04,Tudor Traders,Mombasa,Soap 800g,29,220
+2026-08-04,Voi Road Supplies,Mombasa,Cooking Oil 1L,3,325
+2026-08-04,Voi Road Supplies,Mombasa,Unga 2kg,52,175
+2026-08-05,Likoni Traders,Mombasa,Cooking Oil 1L,15,320
+2026-08-06,City Market Traders,Nairobi,Rice 5kg,4,640
+2026-08-06,Mtwapa Mart,Mombasa,Cooking Oil 1L,8,320
+2026-08-06,Tudor Traders,Mombasa,Cooking Oil 1L,1,325
+2026-08-07,Hassan Traders,Nairobi,Unga 2kg,206,180
+2026-08-07,Tudor Traders,Mombasa,Rice 5kg,7,635
+2026-08-08,Kamau Stores ,Nairobi,Cooking Oil 1L,19,325
+2026-08-08,Kilifi Corner,Mombasa,Sugar 1kg,36,165
+2026-08-08,Mombasa Retail Hub,Mombasa,Rice 5kg,3,650
+2026-08-08,Westlands Grocers,Nairobi,Unga 2kg,42,185
+2026-08-09,Bombolulu Shop,Mombasa,Rice 5kg,28,670
+2026-08-09,Eastleigh Distributors,Nairobi,Unga 2kg,31,175
+2026-08-09,Hassan Traders,Nairobi,Soap 800g,29,215
+2026-08-09,Hassan Traders,Nairobi,Rice 5kg,2,640
+2026-08-09,Kamau Stores ,Nairobi,Unga 2kg,548,180
+2026-08-10,Mombasa Retail Hub,Mombasa,Sugar 1kg,2,160
+2026-08-10,Nyali Mini Mart,Mombasa,Unga 2kg,29,175
+2026-08-11,Kamau Stores ,Nairobi,Soap 800g,84,225
+2026-08-11,Kenyatta Market Traders,Nairobi,Unga 2kg,53,180
+2026-08-11,Mombasa Retail Hub,Mombasa,Unga 2kg,12,180
+2026-08-11,Otieno  Wholesale,Nairobi,Sugar 1kg,242,155
+2026-08-11,Otieno  Wholesale,Nairobi,Sugar 1kg,73,165
+2026-08-12,Bombolulu Shop,Mombasa,Soap 800g,6,220
+2026-08-12,Changamwe Stores,Mombasa,Cooking Oil 1L,5,325
+2026-08-12,City Market Traders,Nairobi,Unga 2kg,101,175
+2026-08-12,Kamau Stores ,Nairobi,Sugar 1kg,82,160
+2026-08-13,Bombolulu Shop,Mombasa,Sugar 1kg,4,160
+2026-08-13,Changamwe Stores,Mombasa,Unga 2kg,33,185
+2026-08-13,Kamau Stores ,Nairobi,Rice 5kg,66,640
+2026-08-13,Otieno  Wholesale,Nairobi,Unga 2kg,52,185
+2026-08-13,Otieno  Wholesale,Nairobi,Unga 2kg,362,185
+2026-08-13,Tudor Traders,Mombasa,Cooking Oil 1L,9,315
+2026-08-14,Bombolulu Shop,Mombasa,Sugar 1kg,16,165
+2026-08-14,Changamwe Stores,Mombasa,Rice 5kg,17,650
+2026-08-14,Industrial Area Depot,Nairobi,Rice 5kg,29,665
+2026-08-14,Nyali Mini Mart,Mombasa,Soap 800g,12,225
+2026-08-14,Westlands Grocers,Nairobi,Cooking Oil 1L,3,325
+2026-08-15,Hassan Traders,Nairobi,Unga 2kg,96,180
+2026-08-15,Kamau Stores ,Nairobi,Unga 2kg,12,185
+2026-08-16,Likoni Traders,Mombasa,Soap 800g,44,220
+2026-08-16,Nyali Mini Mart,Mombasa,Cooking Oil 1L,21,320
+2026-08-17,Kamau Stores ,Nairobi,Rice 5kg,10,665
+2026-08-17,Mombasa Retail Hub,Mombasa,Rice 5kg,34,650
+2026-08-17,Ngara Supplies,Nairobi,Soap 800g,75,220
+2026-08-17,Nyali Mini Mart,Mombasa,Soap 800g,4,225
+2026-08-18,Kenyatta Market Traders,Nairobi,Rice 5kg,16,630
+2026-08-18,Mombasa Retail Hub,Mombasa,Soap 800g,20,225
+2026-08-18,Mombasa Retail Hub,Mombasa,Sugar 1kg,38,160
+2026-08-18,Nyali Mini Mart,Mombasa,Rice 5kg,3,660
+2026-08-18,Westlands Grocers,Nairobi,Soap 800g,30,215
+2026-08-19,Changamwe Stores,Mombasa,Unga 2kg,34,175
+2026-08-19,Eastleigh Distributors,Nairobi,Soap 800g,59,220
+2026-08-19,Kilifi Corner,Mombasa,Unga 2kg,79,180
+2026-08-19,Shanzu Shop,Mombasa,Rice 5kg,6,650
+2026-08-19,Ukunda Mart,Mombasa,Unga 2kg,1,175
+2026-08-20,Changamwe Stores,Mombasa,Cooking Oil 1L,6,320
+2026-08-20,Diani Supplies,Mombasa,Unga 2kg,31,175
+2026-08-20,Hassan Traders,Nairobi,Unga 2kg,4,185
+2026-08-20,Kenyatta Market Traders,Nairobi,Soap 800g,36,220
+2026-08-20,Kongowea Traders,Mombasa,Sugar 1kg,46,160
+2026-08-20,Kongowea Traders,Mombasa,Sugar 1kg,25,160
+2026-08-20,Likoni Traders,Mombasa,Soap 800g,3,220
+2026-08-20,Malindi Wholesale,Mombasa,Unga 2kg,46,175
+2026-08-20,Mtwapa Mart,Mombasa,Unga 2kg,84,185
+2026-08-20,Nyali Mini Mart,Mombasa,Rice 5kg,1,650
+2026-08-21,Eastleigh Distributors,Nairobi,Unga 2kg,78,180
+2026-08-21,Likoni Traders,Mombasa,Rice 5kg,3,640
+2026-08-22,Nyali Mini Mart,Mombasa,Cooking Oil 1L,4,320
+2026-08-23,Eastleigh Distributors,Nairobi,Unga 2kg,52,185
+2026-08-24,Kamau Stores ,Nairobi,Cooking Oil 1L,34,325
+2026-08-24,Otieno  Wholesale,Nairobi,Soap 800g,33,220
+2026-08-26,Changamwe Stores,Mombasa,Rice 5kg,8,640
+2026-08-26,Likoni Traders,Mombasa,Soap 800g,22,220
+2026-08-26,Likoni Traders,Mombasa,Sugar 1kg,66,165
+2026-08-26,Nairobi Fresh Ltd,Nairobi,Sugar 1kg,301,160
+2026-08-26,Nairobi Fresh Ltd,Nairobi,Soap 800g,9,220
+2026-08-26,Nyali Mini Mart,Mombasa,Soap 800g,38,215
+2026-08-26,Shanzu Shop,Mombasa,Unga 2kg,58,180
+2026-08-27,Likoni Traders,Mombasa,Sugar 1kg,45,160
+2026-08-27,Likoni Traders,Mombasa,Unga 2kg,10,185
+2026-08-27,Malindi Wholesale,Mombasa,Rice 5kg,15,660
+2026-08-27,Otieno  Wholesale,Nairobi,Unga 2kg,17,180
+2026-08-29,Diani Supplies,Mombasa,Unga 2kg,8,185
+2026-08-29,Kenyatta Market Traders,Nairobi,Soap 800g,56,220
+2026-08-29,Mombasa Retail Hub,Mombasa,Rice 5kg,4,645
+2026-08-29,Nairobi Fresh Ltd,Nairobi,Sugar 1kg,60,165
+2026-08-30,Mombasa Retail Hub,Mombasa,Sugar 1kg,27,155
+2026-08-30,Mombasa Retail Hub,Mombasa,Rice 5kg,10,640
+2026-08-30,Tudor Traders,Mombasa,Unga 2kg,1,175
+2026-08-31,Hassan Traders,Nairobi,Sugar 1kg,30,160
+2026-08-31,Likoni Traders,Mombasa,Cooking Oil 1L,12,320
+2026-08-31,Mombasa Retail Hub,Mombasa,Soap 800g,14,215
+2026-08-31,Ngara Supplies,Nairobi,Rice 5kg,21,640
+2026-08-31,Otieno  Wholesale,Nairobi,Unga 2kg,46,185

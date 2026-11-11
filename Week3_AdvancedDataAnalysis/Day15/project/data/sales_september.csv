@@ -1,0 +1,84 @@
+date,customer_name,region,product,quantity,price
+2026-09-01,Kilifi Corner,Mombasa,Rice 5kg,1,655
+2026-09-01,kamau stores,Nairobi,Soap 800g,33,215
+2026-09-02,Changamwe Stores,Mombasa,Unga 2kg,15,180
+2026-09-02,Eastleigh Distributors,Nairobi,Unga 2kg,17,180
+2026-09-02,Hassan Traders,Nairobi,Unga 2kg,148,185
+2026-09-02,Ngara Supplies,Nairobi,Rice 5kg,25,665
+2026-09-02,Otieno Wholesale,Nairobi,Soap 800g,54,220
+2026-09-04,kamau stores,Nairobi,Cooking Oil 1L,10,315
+2026-09-05,Changamwe Stores,Mombasa,Rice 5kg,7,635
+2026-09-05,Mombasa Retail Hub,Mombasa,Sugar 1kg,1,160
+2026-09-05,Westlands Grocers,Nairobi,Rice 5kg,1,635
+2026-09-07,Diani Supplies,Mombasa,Sugar 1kg,8,165
+2026-09-07,Eastleigh Distributors,Nairobi,Cooking Oil 1L,21,325
+2026-09-07,Nyali Mini Mart,Mombasa,Rice 5kg,12,650
+2026-09-07,kamau stores,Nairobi,Unga 2kg,93,185
+2026-09-08,Hassan Traders,Nairobi,Soap 800g,15,220
+2026-09-08,kamau stores,Nairobi,Rice 5kg,47,650
+2026-09-09,Bombolulu Shop,Mombasa,Unga 2kg,10,180
+2026-09-09,City Market Traders,Nairobi,Unga 2kg,29,180
+2026-09-10,Ngara Supplies,Nairobi,Cooking Oil 1L,10,330
+2026-09-10,kamau stores,Nairobi,Sugar 1kg,83,165
+2026-09-11,Diani Supplies,Mombasa,Unga 2kg,61,175
+2026-09-11,kamau stores,Nairobi,Rice 5kg,69,665
+2026-09-12,Bombolulu Shop,Mombasa,Rice 5kg,15,635
+2026-09-12,Kenyatta Market Traders,Nairobi,Soap 800g,6,215
+2026-09-12,Mombasa Retail Hub,Mombasa,Cooking Oil 1L,66,315
+2026-09-13,Bombolulu Shop,Mombasa,Rice 5kg,5,665
+2026-09-13,LIKONI TRADERS,Mombasa,Sugar 1kg,14,155
+2026-09-13,Nyali Mini Mart,Mombasa,Unga 2kg,7,180
+2026-09-13,kamau stores,Nairobi,Rice 5kg,34,640
+2026-09-14,Kilifi Corner,Mombasa,Soap 800g,2,215
+2026-09-14,Nyali Mini Mart,Mombasa,Cooking Oil 1L,14,320
+2026-09-14,Otieno Wholesale,Nairobi,Cooking Oil 1L,40,320
+2026-09-14,Westlands Grocers,Nairobi,Sugar 1kg,54,160
+2026-09-15,Malindi Wholesale,Mombasa,Cooking Oil 1L,4,325
+2026-09-15,kamau stores,Nairobi,Rice 5kg,7,635
+2026-09-15,kamau stores,Nairobi,Cooking Oil 1L,39,325
+2026-09-16,City Market Traders,Nairobi,Sugar 1kg,44,155
+2026-09-17,Industrial Area Depot,Nairobi,Rice 5kg,1,640
+2026-09-17,Otieno Wholesale,Nairobi,Soap 800g,117,225
+2026-09-17,kamau stores,Nairobi,Sugar 1kg,48,155
+2026-09-18,Otieno Wholesale,Nairobi,Soap 800g,6,225
+2026-09-18,kamau stores,Nairobi,Sugar 1kg,476,160
+2026-09-18,kamau stores,Nairobi,Rice 5kg,5,645
+2026-09-19,Nairobi Fresh Ltd,Nairobi,Rice 5kg,33,635
+2026-09-19,Otieno Wholesale,Nairobi,Unga 2kg,4,175
+2026-09-19,kamau stores,Nairobi,Sugar 1kg,68,160
+2026-09-20,Hassan Traders,Nairobi,Unga 2kg,98,175
+2026-09-20,Otieno Wholesale,Nairobi,Rice 5kg,80,645
+2026-09-20,Otieno Wholesale,Nairobi,Soap 800g,59,215
+2026-09-21,Hassan Traders,Nairobi,Unga 2kg,24,180
+2026-09-21,Kenyatta Market Traders,Nairobi,Soap 800g,114,225
+2026-09-21,LIKONI TRADERS,Mombasa,Cooking Oil 1L,13,330
+2026-09-21,Mombasa Retail Hub,Mombasa,Unga 2kg,25,185
+2026-09-21,Otieno Wholesale,Nairobi,Cooking Oil 1L,32,315
+2026-09-22,LIKONI TRADERS,Mombasa,Cooking Oil 1L,1,315
+2026-09-22,LIKONI TRADERS,Mombasa,Sugar 1kg,15,165
+2026-09-22,Otieno Wholesale,Nairobi,Rice 5kg,4,630
+2026-09-23,Changamwe Stores,Mombasa,Cooking Oil 1L,19,320
+2026-09-23,Hassan Traders,Nairobi,Cooking Oil 1L,1,325
+2026-09-23,Hassan Traders,Nairobi,Unga 2kg,89,180
+2026-09-23,Kilifi Corner,Mombasa,Sugar 1kg,9,165
+2026-09-23,Kilifi Corner,Mombasa,Cooking Oil 1L,24,325
+2026-09-23,LIKONI TRADERS,Mombasa,Unga 2kg,9,180
+2026-09-23,Mombasa Retail Hub,Mombasa,Rice 5kg,10,640
+2026-09-24,Hassan Traders,Nairobi,Cooking Oil 1L,50,325
+2026-09-24,Industrial Area Depot,Nairobi,Rice 5kg,24,630
+2026-09-24,LIKONI TRADERS,Mombasa,Cooking Oil 1L,45,320
+2026-09-24,Malindi Wholesale,Mombasa,Unga 2kg,36,180
+2026-09-24,Nyali Mini Mart,Mombasa,Sugar 1kg,46,160
+2026-09-24,Otieno Wholesale,Nairobi,Unga 2kg,49,175
+2026-09-25,Changamwe Stores,Mombasa,Cooking Oil 1L,15,325
+2026-09-25,Otieno Wholesale,Nairobi,Rice 5kg,17,635
+2026-09-25,Otieno Wholesale,Nairobi,Cooking Oil 1L,103,315
+2026-09-26,Malindi Wholesale,Mombasa,Cooking Oil 1L,4,310
+2026-09-27,Eastleigh Distributors,Nairobi,Rice 5kg,3,670
+2026-09-27,Eastleigh Distributors,Nairobi,Unga 2kg,129,175
+2026-09-28,Hassan Traders,Nairobi,Unga 2kg,327,185
+2026-09-28,Nairobi Fresh Ltd,Nairobi,Rice 5kg,29,665
+2026-09-29,Hassan Traders,Nairobi,Rice 5kg,26,645
+2026-09-29,Otieno Wholesale,Nairobi,Rice 5kg,12,665
+2026-09-30,Otieno Wholesale,Nairobi,Sugar 1kg,160,165
+2026-09-30,kamau stores,Nairobi,Rice 5kg,24,640
