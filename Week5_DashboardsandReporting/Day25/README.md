@@ -8,8 +8,8 @@ Four days of dashboard skills, then two dashboards a client can open in a browse
 
 | Folder | What it is | Live link |
 |---|---|---|
-| [`project/`](project/README.md) | **The project.** Sales Performance Dashboard for Otieno Wholesale Supplies, a Nairobi distributor: 52 shops, five counties, June to November 2026 | *to be added after deployment* |
-| [`exercise/`](exercise/README.md) | **The exercise.** M-Pesa Business Tracker: upload a business statement and see daily sales, transaction types, weekly trend and busiest hours | *to be added after deployment* |
+| [`project/`](project/README.md) | **The project.** Sales Performance Dashboard for Otieno Wholesale Supplies, a Nairobi distributor: 52 shops, five counties, June to November 2026 | [Open the dashboard](https://otieno-wholesale-dashboard.streamlit.app/) |
+| [`exercise/`](exercise/README.md) | **The exercise.** M-Pesa Business Tracker: upload a business statement and see daily sales, transaction types, weekly trend and busiest hours | [Open the tracker](https://mpesa-business1-tracker.streamlit.app/) |
 
 ## The project in one paragraph
 
@@ -53,7 +53,7 @@ Both apps are ready to deploy straight from this repository. Each folder has its
 
 If the build fails, the log on the right of the deploy screen says why. The most likely cause is a pinned version not being available for the chosen Python. Copy the last red lines of the log and I'll adjust `requirements.txt`.
 
-**After deploying:** send me both live URLs. I will add them to this README and both app READMEs, then tag the release.
+**Deployed:** both apps are live on Streamlit Cloud, from `main`: the [project](https://otieno-wholesale-dashboard.streamlit.app/) and the [exercise](https://mpesa-business1-tracker.streamlit.app/). Each one updates by itself when changes are pushed to `main`.
 
 ## Tags
 

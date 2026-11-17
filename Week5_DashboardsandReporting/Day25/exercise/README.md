@@ -2,7 +2,7 @@
 
 *Week 5 · Dashboards and Reporting · Drop in an M-Pesa business statement and see daily takings, where the money went, and how the week is going.*
 
-**Live dashboard:** *link to be added after deployment*
+**Live dashboard:** [mpesa-business1-tracker.streamlit.app](https://mpesa-business1-tracker.streamlit.app/)
 
 ![The tracker on the sample cafe statement, last 30 days](screenshots/dashboard.png)
 

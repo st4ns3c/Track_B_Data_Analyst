@@ -2,7 +2,7 @@
 
 *Week 5 · Dashboards and Reporting · A deployed Streamlit dashboard for a Nairobi wholesaler: sales by county and month, top accounts, and the shops that have stopped ordering.*
 
-**Live dashboard:** *link to be added after deployment*
+**Live dashboard:** [otieno-wholesale-dashboard.streamlit.app](https://otieno-wholesale-dashboard.streamlit.app/)
 
 ![The dashboard with all counties and all months](screenshots/dashboard.png)
 
@@ -103,7 +103,7 @@ I tested it with Streamlit's `AppTest` and in Chrome against the running server:
 >
 > An interactive Streamlit dashboard for tracking wholesale sales by county and month. Built on distributor data from Nairobi. Features county and month filters, KPI cards with month-on-month change, a revenue trend, the top ten accounts, and a list of shops that have stopped ordering, ranked by the monthly revenue at risk, with a downloadable call list.
 >
-> Live dashboard: *link to be added after deployment* · GitHub: [Week5_DashboardsandReporting/Day25/project](https://github.com/st4ns3c/Track_B_Data_Analyst/tree/main/Week5_DashboardsandReporting/Day25/project)
+> Live dashboard: [otieno-wholesale-dashboard.streamlit.app](https://otieno-wholesale-dashboard.streamlit.app/) · GitHub: [Week5_DashboardsandReporting/Day25/project](https://github.com/st4ns3c/Track_B_Data_Analyst/tree/main/Week5_DashboardsandReporting/Day25/project)
 
 ## What I practised
 
